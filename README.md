@@ -2,4 +2,4 @@
  
 #Installation
 Node 8.6.0 or newer is required.
-npm install discord.js-commando
+npm install discord.js-commandojr
