@@ -1,2 +1,2 @@
-# discord.js-commando
+# discord.js-commandojr
  
