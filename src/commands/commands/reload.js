@@ -8,11 +8,11 @@ module.exports = class ReloadCommandCommand extends Command {
 			aliases: ['reload-command'],
 			group: 'commands',
 			memberName: 'reload',
-			description: 'Reloads a command or command group.',
+			description: 'Recarrega um comando ou grupo de comandos.',
 			details: oneLine`
-				The argument must be the name/ID (partial or whole) of a command or command group.
-				Providing a command group will reload all of the commands in that group.
-				Only the bot owner(s) may use this command.
+			O argumento deve ser o nome / ID (parcial ou inteiro) de um comando ou grupo de comandos.
+			Fornecer um grupo de comandos recarregará todos os comandos nesse grupo.
+			Somente o proprietário do bot pode usar este comando.
 			`,
 			examples: ['reload some-command'],
 			ownerOnly: true,
@@ -22,7 +22,7 @@ module.exports = class ReloadCommandCommand extends Command {
 				{
 					key: 'cmdOrGrp',
 					label: 'command/group',
-					prompt: 'Which command or group would you like to reload?',
+					prompt: 'Qual comando ou grupo você gostaria de recarregar?',
 					type: 'group|command'
 				}
 			]
@@ -38,17 +38,17 @@ module.exports = class ReloadCommandCommand extends Command {
 			try {
 				await this.client.shard.broadcastEval(`
 					if(this.shard.id !== ${this.client.shard.id}) {
-						this.registry.${isCmd ? 'commands' : 'groups'}.get('${isCmd ? cmdOrGrp.name : cmdOrGrp.id}').reload();
+						this.registry.${isCmd ? 'comando' : 'grupo'}.get('${isCmd ? cmdOrGrp.name : cmdOrGrp.id}').reload();
 					}
 				`);
 			} catch(err) {
-				this.client.emit('warn', `Error when broadcasting command reload to other shards`);
+				this.client.emit('warn', `Erro ao transmitir comando recarregar para outros shards`);
 				this.client.emit('error', err);
 				if(isCmd) {
-					await msg.reply(`Reloaded \`${cmdOrGrp.name}\` command, but failed to reload on other shards.`);
+					await msg.reply(`Recarregou \`${cmdOrGrp.name}\` comando, mas falhou ao recarregar em outros shards.`);
 				} else {
 					await msg.reply(
-						`Reloaded all of the commands in the \`${cmdOrGrp.name}\` group, but failed to reload on other shards.`
+						`Recarregou todos os comandos no \`${cmdOrGrp.name}\` grupo, mas falhou ao recarregar outros shards.`
 					);
 				}
 				return null;
@@ -56,10 +56,10 @@ module.exports = class ReloadCommandCommand extends Command {
 		}
 
 		if(isCmd) {
-			await msg.reply(`Reloaded \`${cmdOrGrp.name}\` command${this.client.shard ? ' on all shards' : ''}.`);
+			await msg.reply(`Recarregou \`${cmdOrGrp.name}\` comandos${this.client.shard ? ' em todos os fragmentos' : ''}.`);
 		} else {
 			await msg.reply(
-				`Reloaded all of the commands in the \`${cmdOrGrp.name}\` group${this.client.shard ? ' on all shards' : ''}.`
+				`Recarregou todos os comandos no \`${cmdOrGrp.name}\` grupo${this.client.shard ? ' em todos os fragmentos' : ''}.`
 			);
 		}
 		return null;

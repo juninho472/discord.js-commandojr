@@ -8,10 +8,10 @@ module.exports = class EnableCommandCommand extends Command {
 			aliases: ['enable-command', 'cmd-on', 'command-on'],
 			group: 'commands',
 			memberName: 'enable',
-			description: 'Enables a command or command group.',
+			description: 'Habilita um comando ou grupo de comandos.',
 			details: oneLine`
-				The argument must be the name/ID (partial or whole) of a command or command group.
-				Only administrators may use this command.
+			O argumento deve ser o nome / ID (parcial ou inteiro) de um comando ou grupo de comandos.
+			Somente administradores podem usar este comando.
 			`,
 			examples: ['enable util', 'enable Utility', 'enable prefix'],
 			guarded: true,
@@ -20,7 +20,7 @@ module.exports = class EnableCommandCommand extends Command {
 				{
 					key: 'cmdOrGrp',
 					label: 'command/group',
-					prompt: 'Which command or group would you like to enable?',
+					prompt: 'Qual comando ou grupo você gostaria de ativar?',
 					type: 'group|command'
 				}
 			]
@@ -36,18 +36,18 @@ module.exports = class EnableCommandCommand extends Command {
 		const group = args.cmdOrGrp.group;
 		if(args.cmdOrGrp.isEnabledIn(msg.guild, true)) {
 			return msg.reply(
-				`The \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'command' : 'group'} is already enabled${
+				`O \`${args.cmdOrGrp.name}\` ${args.cmdOrGrp.group ? 'comando' : 'grupo'} já está ativado${
 					group && !group.isEnabledIn(msg.guild) ?
-					`, but the \`${group.name}\` group is disabled, so it still can't be used` :
+					`, mas o \`${group.name}\` O grupo está desativado, por isso ainda não pode ser usado` :
 					''
 				}.`
 			);
 		}
 		args.cmdOrGrp.setEnabledIn(msg.guild, true);
 		return msg.reply(
-			`Enabled the \`${args.cmdOrGrp.name}\` ${group ? 'command' : 'group'}${
+			`Ativado o \`${args.cmdOrGrp.name}\` ${group ? 'coamando' : 'grupo'}${
 				group && !group.isEnabledIn(msg.guild) ?
-				`, but the \`${group.name}\` group is disabled, so it still can't be used` :
+				`, mas o \`${group.name}\` O grupo está desativado, por isso ainda não pode ser usado` :
 				''
 			}.`
 		);

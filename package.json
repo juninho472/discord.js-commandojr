@@ -74,5 +74,5 @@
     "test": "yarn run lint && yarn run docs:test"
   },
   "types": "./typings/index.d.ts",
-  "version": "0.0.1-dev"
+  "version": "0.0.2-dev"
 }

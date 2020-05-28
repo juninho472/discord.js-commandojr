@@ -252,17 +252,17 @@ class Command {
 		if(ownerOverride && this.client.isOwner(message.author)) return true;
 
 		if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
-			return `The \`${this.name}\` command can only be used by the bot owner.`;
+			return `O \`${this.name}\` O comando pode ser usado apenas pelo proprietário do bot.`;
 		}
 
 		if(message.channel.type === 'text' && this.userPermissions) {
 			const missing = message.channel.permissionsFor(message.author).missing(this.userPermissions);
 			if(missing.length > 0) {
 				if(missing.length === 1) {
-					return `The \`${this.name}\` command requires you to have the "${permissions[missing[0]]}" permission.`;
+					return `O \`${this.name}\` comando requer que você tenha o "${permissions[missing[0]]}" permissão.`;
 				}
 				return oneLine`
-					The \`${this.name}\` command requires you to have the following permissions:
+					The \`${this.name}\` comando requer que você tenha as seguintes permissões:
 					${missing.map(perm => permissions[perm]).join(', ')}
 				`;
 			}
@@ -285,7 +285,7 @@ class Command {
 	 * @abstract
 	 */
 	async run(message, args, fromPattern, result) { // eslint-disable-line no-unused-vars, require-await
-		throw new Error(`${this.constructor.name} doesn't have a run() method.`);
+		throw new Error(`${this.constructor.name} não possui um método run().`);
 	}
 
 	/**
@@ -304,27 +304,27 @@ class Command {
 	onBlock(message, reason, data) {
 		switch(reason) {
 			case 'guildOnly':
-				return message.reply(`The \`${this.name}\` command must be used in a server channel.`);
+				return message.reply(`O \`${this.name}\` O comando deve ser usado em um canal do servidor.`);
 			case 'nsfw':
-				return message.reply(`The \`${this.name}\` command can only be used in NSFW channels.`);
+				return message.reply(`O \`${this.name}\` O comando pode ser usado apenas nos canais NSFW.`);
 			case 'permission': {
 				if(data.response) return message.reply(data.response);
-				return message.reply(`You do not have permission to use the \`${this.name}\` command.`);
+				return message.reply(`Você não tem permissão para usar o \`${this.name}\` comando.`);
 			}
 			case 'clientPermissions': {
 				if(data.missing.length === 1) {
 					return message.reply(
-						`I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`
+						`Eu preciso do "${permissions[data.missing[0]]}" permissão para o \`${this.name}\` comando funcionar.`
 					);
 				}
 				return message.reply(oneLine`
-					I need the following permissions for the \`${this.name}\` command to work:
+				Eu preciso das seguintes permissões para o \`${this.name}\` comando funcionar:
 					${data.missing.map(perm => permissions[perm]).join(', ')}
 				`);
 			}
 			case 'throttling': {
 				return message.reply(
-					`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`
+					`Você não pode usar o \`${this.name}\` comando novamente para outro ${data.remaining.toFixed(1)} segundos.`
 				);
 			}
 			default:
@@ -351,9 +351,9 @@ class Command {
 
 		const invite = this.client.options.invite;
 		return message.reply(stripIndents`
-			An error occurred while running the command: \`${err.name}: ${err.message}\`
-			You shouldn't ever receive an error like this.
-			Please contact ${ownerList || 'the bot owner'}${invite ? ` in this server: ${invite}` : '.'}
+			Ocorreu um erro ao executar o comando:\`${err.name}: ${err.message}\`
+			Você nunca deve receber um erro como este.
+			Por favor entre em contato ${ownerList || 'o dono do bot'}${invite ? ` neste servidor: ${invite}` : '.'}
 		`);
 	}
 
@@ -387,8 +387,8 @@ class Command {
 	 * @param {boolean} enabled - Whether the command should be enabled or disabled
 	 */
 	setEnabledIn(guild, enabled) {
-		if(typeof guild === 'undefined') throw new TypeError('Guild must not be undefined.');
-		if(typeof enabled === 'undefined') throw new TypeError('Enabled must not be undefined.');
+		if(typeof guild === 'undefined') throw new TypeError('O servidor não deve ser indefinida.');
+		if(typeof enabled === 'undefined') throw new TypeError('Ativado não deve ser indefinido.');
 		if(this.guarded) throw new Error('The command is guarded.');
 		if(!guild) {
 			this._globalEnabled = enabled;
@@ -454,7 +454,7 @@ class Command {
 				newCmd = require(cmdPath);
 			} catch(err2) {
 				if(cached) require.cache[cmdPath] = cached;
-				if(err2.message.includes('Cannot find module')) throw err; else throw err2;
+				if(err2.message.includes('Não foi possível encontrar o módulo')) throw err; else throw err2;
 			}
 		}
 
@@ -466,7 +466,7 @@ class Command {
 	 */
 	unload() {
 		const cmdPath = this.client.registry.resolveCommandPath(this.groupID, this.memberName);
-		if(!require.cache[cmdPath]) throw new Error('Command cannot be unloaded.');
+		if(!require.cache[cmdPath]) throw new Error('O comando não pode ser descarregado.');
 		delete require.cache[cmdPath];
 		this.client.registry.unregisterCommand(this);
 	}
@@ -502,17 +502,17 @@ class Command {
 	 * @private
 	 */
 	static validateInfo(client, info) { // eslint-disable-line complexity
-		if(!client) throw new Error('A client must be specified.');
-		if(typeof info !== 'object') throw new TypeError('Command info must be an Object.');
-		if(typeof info.name !== 'string') throw new TypeError('Command name must be a string.');
-		if(info.name !== info.name.toLowerCase()) throw new Error('Command name must be lowercase.');
+		if(!client) throw new Error('Um cliente deve ser especificado.');
+		if(typeof info !== 'object') throw new TypeError('As informações do comando devem ser um Objeto.');
+		if(typeof info.name !== 'string') throw new TypeError('O nome do comando deve ser uma string.');
+		if(info.name !== info.name.toLowerCase()) throw new Error('O nome do comando deve estar em minúsculas.');
 		if(info.aliases && (!Array.isArray(info.aliases) || info.aliases.some(ali => typeof ali !== 'string'))) {
-			throw new TypeError('Command aliases must be an Array of strings.');
+			throw new TypeError('Os aliases de comando devem ser uma matriz de strings.');
 		}
 		if(info.aliases && info.aliases.some(ali => ali !== ali.toLowerCase())) {
-			throw new RangeError('Command aliases must be lowercase.');
+			throw new RangeError('Os aliases de comando devem estar em minúsculas.');
 		}
-		if(typeof info.group !== 'string') throw new TypeError('Command group must be a string.');
+		if(typeof info.group !== 'string') throw new TypeError('Command group must be aO grupo de comandos deve ser uma string.');
 		if(info.group !== info.group.toLowerCase()) throw new RangeError('Command group must be lowercase.');
 		if(typeof info.memberName !== 'string') throw new TypeError('Command memberName must be a string.');
 		if(info.memberName !== info.memberName.toLowerCase()) throw new Error('Command memberName must be lowercase.');

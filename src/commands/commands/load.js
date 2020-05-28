@@ -9,10 +9,10 @@ module.exports = class LoadCommandCommand extends Command {
 			aliases: ['load-command'],
 			group: 'commands',
 			memberName: 'load',
-			description: 'Loads a new command.',
+			description: 'Carrega um novo comando.',
 			details: oneLine`
-				The argument must be full name of the command in the format of \`group:memberName\`.
-				Only the bot owner(s) may use this command.
+			O argumento deve ser o nome completo do comando no formato de \`group:memberName\`.
+				Somente o proprietário do bot pode usar este comando.
 			`,
 			examples: ['load some-command'],
 			ownerOnly: true,
@@ -21,13 +21,13 @@ module.exports = class LoadCommandCommand extends Command {
 			args: [
 				{
 					key: 'command',
-					prompt: 'Which command would you like to load?',
+					prompt: 'Qual comando você gostaria de carregar?',
 					validate: val => new Promise(resolve => {
 						if(!val) return resolve(false);
 						const split = val.split(':');
 						if(split.length !== 2) return resolve(false);
 						if(this.client.registry.findCommands(val).length > 0) {
-							return resolve('That command is already registered.');
+							return resolve('Esse comando já está registrado.');
 						}
 						const cmdPath = this.client.registry.resolveCommandPath(split[0], split[1]);
 						fs.access(cmdPath, fs.constants.R_OK, err => err ? resolve(false) : resolve(true));
@@ -58,14 +58,14 @@ module.exports = class LoadCommandCommand extends Command {
 					}
 				`);
 			} catch(err) {
-				this.client.emit('warn', `Error when broadcasting command load to other shards`);
+				this.client.emit('warn', `Erro ao transmitir o carregamento do comando para outros shards`);
 				this.client.emit('error', err);
-				await msg.reply(`Loaded \`${command.name}\` command, but failed to load on other shards.`);
+				await msg.reply(`Carragando \`${command.name}\` comando, mas falhou ao carregar em outros shards.`);
 				return null;
 			}
 		}
 
-		await msg.reply(`Loaded \`${command.name}\` command${this.client.shard ? ' on all shards' : ''}.`);
+		await msg.reply(`Carregando \`${command.name}\` comando${this.client.shard ? ' em todos os fragmentos' : ''}.`);
 		return null;
 	}
 };

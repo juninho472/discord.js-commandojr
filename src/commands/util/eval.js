@@ -13,14 +13,14 @@ module.exports = class EvalCommand extends Command {
 			name: 'eval',
 			group: 'util',
 			memberName: 'eval',
-			description: 'Executes JavaScript code.',
-			details: 'Only the bot owner(s) may use this command.',
+			description: 'Executa código JavaScript.',
+			details: 'Somente o proprietário do bot pode usar este comando.',
 			ownerOnly: true,
 
 			args: [
 				{
 					key: 'script',
-					prompt: 'What code would you like to evaluate?',
+					prompt: 'Qual código você gostaria de avaliar?',
 					type: 'string'
 				}
 			]
@@ -31,14 +31,14 @@ module.exports = class EvalCommand extends Command {
 	}
 
 	run(msg, args) {
-		// Make a bunch of helpers
+		// Faça um monte de ajudantes
 		/* eslint-disable no-unused-vars */
 		const message = msg;
 		const client = msg.client;
 		const lastResult = this.lastResult;
 		const doReply = val => {
 			if(val instanceof Error) {
-				msg.reply(`Callback error: \`${val}\``);
+				msg.reply(`Erro de retorno de chamadar: \`${val}\``);
 			} else {
 				const result = this.makeResultMessages(val, process.hrtime(this.hrStart));
 				if(Array.isArray(result)) {
@@ -50,17 +50,17 @@ module.exports = class EvalCommand extends Command {
 		};
 		/* eslint-enable no-unused-vars */
 
-		// Run the code and measure its execution time
+		// Execute o código e meça o tempo de execução
 		let hrDiff;
 		try {
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
-			return msg.reply(`Error while evaluating: \`${err}\``);
+			return msg.reply(`Erro ao avaliar: \`${err}\``);
 		}
 
-		// Prepare for callback time and respond
+		// Prepare-se para o tempo de retorno de chamada e responda
 		this.hrStart = process.hrtime();
 		const result = this.makeResultMessages(this.lastResult, hrDiff, args.script);
 		if(Array.isArray(result)) {
@@ -84,14 +84,14 @@ module.exports = class EvalCommand extends Command {
 		const append = `\n${appendPart}\n\`\`\``;
 		if(input) {
 			return discord.splitMessage(tags.stripIndents`
-				*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
+				*Executado em ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`
 			`, { maxLength: 1900, prepend, append });
 		} else {
 			return discord.splitMessage(tags.stripIndents`
-				*Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
+				*Retorno de chamada executado após ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.*
 				\`\`\`javascript
 				${inspected}
 				\`\`\`

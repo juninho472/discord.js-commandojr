@@ -8,8 +8,8 @@ module.exports = class ListGroupsCommand extends Command {
 			aliases: ['list-groups', 'show-groups'],
 			group: 'commands',
 			memberName: 'groups',
-			description: 'Lists all command groups.',
-			details: 'Only administrators may use this command.',
+			description: 'Lista todos os grupos de comandos.',
+			details: 'Somente administradores podem usar este comando.',
 			guarded: true
 		});
 	}
@@ -23,7 +23,7 @@ module.exports = class ListGroupsCommand extends Command {
 		return msg.reply(stripIndents`
 			__**Groups**__
 			${this.client.registry.groups.map(grp =>
-				`**${grp.name}:** ${grp.isEnabledIn(msg.guild) ? 'Enabled' : 'Disabled'}`
+				`**${grp.name}:** ${grp.isEnabledIn(msg.guild) ? 'Ativado' : 'Desativado'}`
 			).join('\n')}
 		`);
 	}

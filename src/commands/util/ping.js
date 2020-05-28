@@ -22,7 +22,7 @@ module.exports = class PingCommand extends Command {
 			Pong! A mensagem ida e volta levou ${
 				(pingMsg.editedTimestamp || pingMsg.createdTimestamp) - (msg.editedTimestamp || msg.createdTimestamp)
 			}ms.
-			${this.client.ws.ping ? `O ping de pulsação é ${Math.round(this.client.ws.ping)}ms.` : ''}
+			${this.client.ws.ping ? `O ping do bot é ${Math.round(this.client.ws.ping)}ms.` : ''}
 		`);
 	}
 };

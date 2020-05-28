@@ -10,8 +10,8 @@ module.exports = class UnloadCommandCommand extends Command {
 			memberName: 'unload',
 			description: 'Unloads a command.',
 			details: oneLine`
-				The argument must be the name/ID (partial or whole) of a command.
-				Only the bot owner(s) may use this command.
+			O argumento deve ser o nome / ID (parcial ou inteiro) de um comando.
+			Somente o proprietário do bot pode usar este comando.
 			`,
 			examples: ['unload some-command'],
 			ownerOnly: true,
@@ -20,7 +20,7 @@ module.exports = class UnloadCommandCommand extends Command {
 			args: [
 				{
 					key: 'command',
-					prompt: 'Which command would you like to unload?',
+					prompt: 'Qual comando você gostaria de descarregar?',
 					type: 'command'
 				}
 			]
@@ -36,14 +36,14 @@ module.exports = class UnloadCommandCommand extends Command {
 					if(this.shard.id !== ${this.client.shard.id}) this.registry.commands.get('${args.command.name}').unload();
 				`);
 			} catch(err) {
-				this.client.emit('warn', `Error when broadcasting command unload to other shards`);
+				this.client.emit('warn', `Erro ao transmitir comando descarregar para outros shards`);
 				this.client.emit('error', err);
-				await msg.reply(`Unloaded \`${args.command.name}\` command, but failed to unload on other shards.`);
+				await msg.reply(`Descarregando \`${args.command.name}\` comando, mas não conseguiu descarregar em outros shards.`);
 				return null;
 			}
 		}
 
-		await msg.reply(`Unloaded \`${args.command.name}\` command${this.client.shard ? ' on all shards' : ''}.`);
+		await msg.reply(`Descarregando \`${args.command.name}\` comando${this.client.shard ? ' em todos os fragmentos' : ''}.`);
 		return null;
 	}
 };

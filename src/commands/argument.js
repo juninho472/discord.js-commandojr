@@ -179,10 +179,10 @@ class Argument {
 
 			// Prompt the user for a new value
 			prompts.push(await msg.reply(stripIndents`
-				${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}. Please try again.`}
+				${empty ? this.prompt : valid ? valid : `Você forneceu um ${this.label} inválido. Por favor, tente novamente.`}
 				${oneLine`
-					Respond with \`cancel\` to cancel the command.
-					${wait ? `The command will automatically be cancelled in ${this.wait} seconds.` : ''}
+				Responder com \`cancelar\` para cancelar o comando.
+					${wait ? `O comando será automaticamente cancelado em ${this.wait} segundos.` : ''}
 				`}
 			`));
 
@@ -205,8 +205,8 @@ class Argument {
 				};
 			}
 
-			// See if they want to cancel
-			if(val.toLowerCase() === 'cancel') {
+			// See if they want to cancelar
+			if(val.toLowerCase() === 'cancelar') {
 				return {
 					value: null,
 					cancelled: 'user',
@@ -265,21 +265,21 @@ class Argument {
 					const escaped = escapeMarkdown(val).replace(/@/g, '@\u200b');
 					prompts.push(await msg.reply(stripIndents`
 						${valid ? valid : oneLine`
-							You provided an invalid ${this.label},
-							"${escaped.length < 1850 ? escaped : '[too long to show]'}".
-							Please try again.
+						Você forneceu um ${this.label} inválido,
+							"${escaped.length < 1850 ? escaped : '[muito tempo para mostrar]'}".
+							Por favor, tente novamente.
 						`}
 						${oneLine`
-							Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.
-							${wait ? `The command will automatically be cancelled in ${this.wait} seconds.` : ''}
+							Responde com \`cancelar\` para cancelar o comando, ou \`finish\` para terminar a entrada.
+							${wait ? `O comando será automaticamente cancelado em ${this.wait} segundos.` : ''}
 						`}
 					`));
 				} else if(results.length === 0) {
 					prompts.push(await msg.reply(stripIndents`
 						${this.prompt}
 						${oneLine`
-							Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry.
-							${wait ? `The command will automatically be cancelled in ${this.wait} seconds, unless you respond.` : ''}
+						Responde com \`cancelar\` para cancelar o comando, ou \`finish\` para terminar a entrada.
+							${wait ? `O comando será automaticamente cancelado em ${this.wait} segundos, a menos que você responda.` : ''}
 						`}
 					`));
 				}
@@ -303,7 +303,7 @@ class Argument {
 					};
 				}
 
-				// See if they want to finish or cancel
+				// See if they want to finish or cancelar
 				const lc = val.toLowerCase();
 				if(lc === 'finish') {
 					return {
@@ -313,7 +313,7 @@ class Argument {
 						answers
 					};
 				}
-				if(lc === 'cancel') {
+				if(lc === 'cancelar') {
 					return {
 						value: null,
 						cancelled: 'user',
@@ -386,30 +386,30 @@ class Argument {
 	 * @private
 	 */
 	static validateInfo(client, info) { // eslint-disable-line complexity
-		if(!client) throw new Error('The argument client must be specified.');
-		if(typeof info !== 'object') throw new TypeError('Argument info must be an Object.');
-		if(typeof info.key !== 'string') throw new TypeError('Argument key must be a string.');
-		if(info.label && typeof info.label !== 'string') throw new TypeError('Argument label must be a string.');
-		if(typeof info.prompt !== 'string') throw new TypeError('Argument prompt must be a string.');
-		if(info.error && typeof info.error !== 'string') throw new TypeError('Argument error must be a string.');
-		if(info.type && typeof info.type !== 'string') throw new TypeError('Argument type must be a string.');
+		if(!client) throw new Error('O cliente do argumento deve ser especificado.');
+		if(typeof info !== 'object') throw new TypeError('As informações do argumento devem ser um objeto.');
+		if(typeof info.key !== 'string') throw new TypeError('A chave do argumento deve ser uma string.');
+		if(info.label && typeof info.label !== 'string') throw new TypeError('O rótulo do argumento deve ser uma string.');
+		if(typeof info.prompt !== 'string') throw new TypeError('O prompt de argumento deve ser uma string.');
+		if(info.error && typeof info.error !== 'string') throw new TypeError('O erro de argumento deve ser uma string.');
+		if(info.type && typeof info.type !== 'string') throw new TypeError('O tipo de argumento deve ser uma string.');
 		if(info.type && !info.type.includes('|') && !client.registry.types.has(info.type)) {
-			throw new RangeError(`Argument type "${info.type}" isn't registered.`);
+			throw new RangeError(`Tipo de argumento "${info.type}" não está registrado.`);
 		}
 		if(!info.type && !info.validate) {
-			throw new Error('Argument must have either "type" or "validate" specified.');
+			throw new Error('O argumento deve ter "type" ou "validate" especificado.');
 		}
 		if(info.validate && typeof info.validate !== 'function') {
-			throw new TypeError('Argument validate must be a function.');
+			throw new TypeError('A validação de argumento deve ser uma função.');
 		}
 		if(info.parse && typeof info.parse !== 'function') {
-			throw new TypeError('Argument parse must be a function.');
+			throw new TypeError('A análise de argumentos deve ser uma função.');
 		}
 		if(!info.type && (!info.validate || !info.parse)) {
-			throw new Error('Argument must have both validate and parse since it doesn\'t have a type.');
+			throw new Error('O argumento deve ter validar e analisar, pois não possui um tipo.');
 		}
 		if(typeof info.wait !== 'undefined' && (typeof info.wait !== 'number' || Number.isNaN(info.wait))) {
-			throw new TypeError('Argument wait must be a number.');
+			throw new TypeError('A espera do argumento deve ser um número.');
 		}
 	}
 
